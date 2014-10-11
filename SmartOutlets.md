@@ -2,17 +2,20 @@
 
 ## Description
 
-This document describes the protocol used for communication between the Smart Outlets Network (`coordinator`) and the SMRTControl device (`client`).
+This document describes the protocol used for communication between the SmartOutlets network (`coordinator`) and the SMRTControl device (`client`).
 
 ## Packet Format
 
 Each packet consists of three components: 
 
- * a packet identifier
+ * a device type ID
+ * a packet ID
  * a message ID
  * a data segment
 
-The packet identifier contains is one byte that uniquely identifies the packet type.
+The devie type ID identifies the message as a SmartOutlets packet.  This should always be `0x03` for all communication between the `coordinator` and the `client`.
+
+The packet ID contains is one byte that uniquely identifies the packet type.
 
 The message ID is an arbitrary identifier for the message.  In all requests, it is chosen by the `client` and in all responses it is the ID of the message being responded to.  For example, a response to a request with message ID 0x1F would also have a message ID of 0x1F.  This is so the `client` can associate the response it receives with the specific request it issued.
 
@@ -20,9 +23,10 @@ The data segment contains zero or more bytes that are specified by the packet's 
 
 | Start bit | End bit | Field                                            |
 |:---------:|:-------:| ------------------------------------------------ |
-| 0         | 7       | Packet ID                                        |
-| 8         | 15      | Message ID                                       |
-| 16        | ...     | Data segment                                     |
+| 0         | 7       | Device type ID                                   |
+| 8         | 15      | Packet ID                                        |
+| 16        | 23      | Message ID                                       |
+| 24        | __...__ | Data segment                                     |
 
 
 ## Commands/Requests
